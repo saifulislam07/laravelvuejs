@@ -5317,12 +5317,41 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   data: function data() {
     return {
       todos: [],
       api: "http://127.0.0.1:8000/api/todos",
-      todo_input: ""
+      todo_input: "",
+      edit_todo_id: "",
+      edit_index: ""
     };
   },
   mounted: function mounted() {
@@ -5357,6 +5386,30 @@ __webpack_require__.r(__webpack_exports__);
           _this3.todos.splice(index, 1);
         });
       }
+    },
+    editTodo: function editTodo(index) {
+      if (this.todos[index].id) {
+        this.todo_input = this.todos[index].name;
+        this.edit_todo_id = this.todos[index].id;
+        this.edit_index = index;
+      }
+    },
+    updateTodo: function updateTodo() {
+      var _this4 = this;
+
+      if (this.todo_input.length > 0) {
+        var data = {
+          name: this.todo_input
+        };
+        this.axios.patch(this.api + "/" + this.todos[this.edit_index].id, data).then(function (res) {
+          _this4.todos[_this4.edit_index].name = res.data.name;
+        });
+      }
+    },
+    resetTodo: function resetTodo() {
+      this.todo_input = "";
+      this.edit_index = "";
+      this.edit_todo_id = "";
     }
   }
 });
@@ -28010,61 +28063,105 @@ var render = function () {
               }),
               _vm._v(" "),
               _c("div", { staticClass: "input-group-append" }, [
-                _c(
-                  "button",
-                  {
-                    staticClass: "btn btn-info",
-                    attrs: { type: "button" },
-                    on: {
-                      click: function ($event) {
-                        return _vm.saveTodo()
+                !_vm.edit_todo_id
+                  ? _c(
+                      "button",
+                      {
+                        staticClass: "btn btn-info",
+                        attrs: { type: "button" },
+                        on: {
+                          click: function ($event) {
+                            return _vm.saveTodo()
+                          },
+                        },
                       },
-                    },
-                  },
-                  [_vm._v("\n                Add\n              ")]
-                ),
+                      [_vm._v("\n                Add\n              ")]
+                    )
+                  : _c(
+                      "button",
+                      {
+                        staticClass: "btn btn-warning",
+                        attrs: { type: "button" },
+                        on: {
+                          click: function ($event) {
+                            return _vm.updateTodo()
+                          },
+                        },
+                      },
+                      [_vm._v("\n                Update\n              ")]
+                    ),
               ]),
             ]),
             _vm._v(" "),
             _c(
-              "table",
-              { staticClass: "table table-dark table-bordered mt-4" },
-              [
-                _vm._m(0),
-                _vm._v(" "),
-                _c(
-                  "tbody",
-                  _vm._l(_vm.todos, function (todo, index) {
-                    return _c("tr", { key: index }, [
-                      _c("td", [_vm._v(_vm._s(++index))]),
-                      _vm._v(" "),
-                      _c("td", [_vm._v(_vm._s(todo.name))]),
-                      _vm._v(" "),
-                      _c("td", [
-                        _c(
-                          "button",
-                          {
-                            staticClass: "btn btn-sm btn-danger",
-                            attrs: { type: "button" },
-                            on: {
-                              click: function ($event) {
-                                return _vm.deleteTodo(--index)
-                              },
+              "button",
+              {
+                staticClass: "btn btn-sm btn-danger mt-3",
+                attrs: { type: "button" },
+                on: {
+                  click: function ($event) {
+                    return _vm.resetTodo()
+                  },
+                },
+              },
+              [_vm._v("\n            Reset\n          ")]
+            ),
+            _vm._v(" "),
+            _c("table", { staticClass: "table table-bordered mt-4" }, [
+              _vm._m(0),
+              _vm._v(" "),
+              _c(
+                "tbody",
+                _vm._l(_vm.todos, function (todo, index) {
+                  return _c("tr", { key: index }, [
+                    _c("td", { attrs: { width: "5%" } }, [
+                      _vm._v(_vm._s(++index)),
+                    ]),
+                    _vm._v(" "),
+                    _c("td", [_vm._v(_vm._s(todo.name))]),
+                    _vm._v(" "),
+                    _c("td", { attrs: { width: "30%" } }, [
+                      _c(
+                        "button",
+                        {
+                          staticClass: "btn btn-sm btn-info",
+                          attrs: { type: "button" },
+                          on: {
+                            click: function ($event) {
+                              return _vm.editTodo(--index)
                             },
                           },
-                          [
-                            _vm._v(
-                              "\n                    Delete\n                  "
-                            ),
-                          ]
-                        ),
-                      ]),
-                    ])
-                  }),
-                  0
-                ),
-              ]
-            ),
+                        },
+                        [
+                          _vm._v(
+                            "\n                    Edit\n                  "
+                          ),
+                        ]
+                      ),
+                      _vm._v(" "),
+                      _c(
+                        "button",
+                        {
+                          staticClass: "btn btn-sm btn-danger",
+                          attrs: { type: "button" },
+                          on: {
+                            click: function ($event) {
+                              return _vm.deleteTodo(--index)
+                            },
+                          },
+                        },
+                        [
+                          _vm._v(
+                            "\n                    Delete\n                  "
+                          ),
+                        ]
+                      ),
+                    ]),
+                  ])
+                }),
+                0
+              ),
+            ]),
           ]),
         ]),
       ]),
