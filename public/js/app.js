@@ -5403,6 +5403,8 @@ __webpack_require__.r(__webpack_exports__);
         };
         this.axios.patch(this.api + "/" + this.todos[this.edit_index].id, data).then(function (res) {
           _this4.todos[_this4.edit_index].name = res.data.name;
+
+          _this4.resetTodo();
         });
       }
     },

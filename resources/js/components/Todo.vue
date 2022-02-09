@@ -131,6 +131,7 @@ export default {
           .patch(this.api + "/" + this.todos[this.edit_index].id, data)
           .then((res) => {
             this.todos[this.edit_index].name = res.data.name;
+            this.resetTodo();
           });
       }
     },
